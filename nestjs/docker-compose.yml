@@ -1,0 +1,58 @@
+version: "3.5"
+services:
+  clinic-api:
+    # image: igorlage/painel-gestor-back:0.0.1 # producao
+    build: # desenvolvimento
+      context: .
+      # dockerfile: Dockerfile.prod # teste de produção
+      dockerfile: Dockerfile.dev # teste em dev
+    container_name: clinic-api
+    restart: always
+    tty: true # comentar para teste de produção
+    entrypoint: ["sh", "-c"] # comentar para teste de produção
+    # command: ["npm install && npm run start:dev"] # comentar para teste de produção
+    command: ["npm run start:dev"] # comentar para teste de produção
+    ports:
+      - "3000:3000"
+    environment:
+      API_PORT: 3000
+      INSTANCE_HOST: clinic-db
+      DB_PORT: 5432
+      DB_NAME: clinic_manager
+      DB_USER: pguser
+      DB_PASS: pgpass
+      ssynchronize: 1
+      logging: 1
+      # keycloak
+      JWT_SECRET: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuxeOwW3M+DMQY0MiyOTvgyMkIC52h5WAOSRaDF2uhL9VYsaTylM8uLtgr1hmgT9ixvk/3sG/FuRhmO0Z29oEjamHSe1oqkhE1zprmiRG2KN51XjbJ9q96e4yPGdcAe5jFNvDMe2Ol3OjKE5n/vo2iUo4GHJAi4YtKsnQojqlI4jT32TLSHq7dv1rbv89jTe9d9bug5Af+WbXgA5yrv7uZjuxKGqmBQ3B/EZMVVPpbPywu12jpNlYhVgs2ccFx8PsFmPkO1wBqX/cOc6t6kAjrC67saWVP20bLikFWNEqXllHXhbbiKJAk70MfpFGxEefzqVIbm1HfkHeBg0TnbO56wIDAQAB\n-----END PUBLIC KEY-----"
+      KC_HOST: http://host.docker.internal:8080
+      KC_REALM: clinic-manager
+      KC_CLIENT_ID: next-clinic-manager
+      KC_CLIENT_SECRET: 4BoZYrQWHFj5wu1ZyaxLRuhYUz8Yk5aU
+    volumes:
+      - ./:/home/node/app
+    depends_on:
+      - clinic-db
+    extra_hosts:
+      - host.docker.internal:172.17.0.1
+    
+
+  clinic-db:
+    image: postgres:11
+    container_name: clinic-db
+    restart: always
+    volumes:
+      - ./db/back/postgres/data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: exit 0
+    environment:
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: pgpass
+      POSTGRES_DB: clinic_manager
+
+  redis:
+    container_name: redis
+    image: redis:7.0.8-alpine
+    restart: always

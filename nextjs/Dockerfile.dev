@@ -1,0 +1,11 @@
+FROM node:20-slim
+
+WORKDIR /home/node/app
+
+COPY package*.json ./
+
+RUN npm install
+
+EXPOSE 3001
+
+ENV PORT 3001

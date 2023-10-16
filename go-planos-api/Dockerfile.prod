@@ -1,0 +1,32 @@
+# Etapa de construção
+FROM golang:1.18 as builder
+
+WORKDIR /app
+
+# Instala o 'realize'
+RUN go install github.com/oxequa/realize@latest
+
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+
+# Compilar a aplicação
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/userservice/main.go
+
+# Etapa de execução
+FROM alpine:latest  
+
+# Instala certificados
+RUN apk --no-cache add ca-certificates
+
+WORKDIR /root/
+
+# Copiar o binário do passo de construção e o realize.yaml
+COPY --from=builder /app/main .
+COPY --from=builder /app/.realize.yaml .
+
+# Expor a porta
+EXPOSE 8080
+
+# Definir o comando para rodar o realize
+CMD ["realize", "start"]

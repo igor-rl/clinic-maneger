@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+
+  app:
+    build: .
+    restart: always
+    container_name: appproduct
+    ports:
+      - "9000:9000"
+    volumes:
+      - .:/go/src/
+      
+  # goplanos-api:
+  #   container_name: goplanos-api
+  #   build: 
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   restart: always
+  #   ports:
+  #     - "4400:8080"
+  #   volumes:   # Monta o código fonte para dentro do contêiner
+  #     - ./:/app
+  #   depends_on:
+  #     - pgt-planos-db
+
+  # pgt-planos-db:
+  #   container_name: pgt-planos-db
+  #   image: postgres
+  #   environment:
+  #     POSTGRES_USER: admin
+  #     POSTGRES_PASSWORD: pass*123
+  #     POSTGRES_DB: planos
+  #   restart: always
+  #   ports:
+  #     - "4401:5432"
+  #   volumes:
+  #     - ./.postgresql/data/:/var/lib/postgresql/data

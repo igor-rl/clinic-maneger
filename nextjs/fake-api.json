@@ -1,0 +1,30 @@
+{
+  "plano": [
+    {
+      "id": "04390e20-d0d5-4437-997c-00ffbbf84291",
+      "titulo": "Plano Básico",
+      "descricao": "Descrição detalhada do plano básico",
+      "preco": "199.99",
+      "periodo_teste": 7,
+      "max_matriz": 1,
+      "max_filiais": 1,
+      "colaboradores": 1,
+      "convites": 0,
+      "ativo": false,
+      "validade": "2023-10-16T15:41:32.495Z",
+      "createdAt": "2023-10-15T15:50:16.312Z",
+      "updatedAt": "2023-10-15T15:50:16.312Z",
+      "deletedAt": null
+    }
+  ],
+  "pedido": [
+    {
+      "id_usuario": "165266bf-2ad0-419c-9c1c-f15979f9735e",
+      "id_plano": "M3TppTr",
+      "metodo_pagamento": "pix",
+      "id": 1
+    }
+  ],
+  "ordem_pagamento": [],
+  "adesao": []
+}
